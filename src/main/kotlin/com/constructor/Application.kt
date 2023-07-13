@@ -6,7 +6,7 @@ import io.ktor.server.netty.*
 import com.constructor.plugins.*
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.server.freemarker.*
-import com.constructor.DAO.*
+//import com.constructor.DAO.*
 
 //import com.constructor.DB_set.*
 
@@ -17,5 +17,8 @@ fun main() {
 
 fun Application.module() {
     configureRouting()
-    DatabaseFactory.init()
+    install(FreeMarker) {
+        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "static")
+    }
+    //DatabaseFactory.init()
 }
