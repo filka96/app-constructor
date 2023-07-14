@@ -18,7 +18,7 @@ fun main() {
 fun Application.module() {
     configureRouting()
     install(FreeMarker) {
-        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "static")
+        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
     //DatabaseFactory.init()
 }

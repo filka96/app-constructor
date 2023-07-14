@@ -1,31 +1,35 @@
 package com.constructor.plugins
 
 import com.constructor.database.models.TableDTO
-import io.ktor.http.*
+import com.constructor.database.models.TableModel
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
-import io.ktor.server.freemarker.*
-import io.ktor.server.html.*
 import io.ktor.server.routing.get
-import kotlinx.html.body
-import kotlinx.html.button
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import java.io.File
 
 fun Application.configureRouting() {
-    val defaultServerLink: String = "http://127.0.0.1:8080"
-
     routing {
         get("/")
         {
+            //Database.connect("jdbc:postgresql://localhost:5432/Test", "org.postgresql.Driver")
+            //val query: Query = TableModel.select { TableModel.id eq 2 }
+            val query : Query = TableModel.selectAll()
+            query.forEach {
+                println(it[TableModel.id])
+            }
+
             call.respondFile(File("src/main/resources/static/CRUD.html"))
             //TODO link on next html page
         }
-        get("/read")
+        get("/create")
         {
             //TODO show db Table data
-            val myDB = TableDTO(12, "fuck", 43, true)
-            call.respond(FreeMarkerContent("Read.html", mapOf("table" to myDB)))
+            call.respondText("goodbye")
         }
         /*get("/create")
         {

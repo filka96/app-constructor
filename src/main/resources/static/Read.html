@@ -12,13 +12,23 @@
     <br>
     <br>
     <table>
+        <thead>
+        <tr>
+            <th>PK</th>
+            <th>string</th>
+            <th>integer</th>
+            <th>bool</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list items as item>
         <tr>
             <td>${table.id}</td>
             <td>${table.stringfield}</td>
             <td>${table.intfield}</td>
             <td>${table.boolfield}</td>
         </tr>
-
+        </tbody>
     </table>
 </body>
 </html>
