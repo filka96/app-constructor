@@ -1,44 +1,49 @@
 package com.constructor.plugins
 
-import com.constructor.CRUD
-import io.ktor.http.*
+import com.constructor.database.CRUD
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
-import io.ktor.server.html.*
 import io.ktor.server.routing.get
-import kotlinx.html.*
 import java.io.File
 
 fun Application.configureRouting() {
     routing {
         get("/")
         {
-            call.respondFile(File("src/main/resources/static/CRUD.html"))
+
+            call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
+        }
+        get("/create")
+        {
+            // input data for example
+            val id = 23
+            val stringLine = "good weather"
+            val number = 6666
+            val boolField = true
+
+            val obj : CRUD = CRUD() // вызвали дефолтный конструктор
+            obj.create(id, stringLine, number, boolField)
+
+            call.respondText("Check debug log")
         }
         get("/read")
         {
             val obj : CRUD = CRUD()
-            val str = obj.read() // Type ArrayList<String>
-            call.respondHtml(HttpStatusCode.OK)
+            val Data = obj.read()
+            // read
+            try
             {
-                body {
-                    ul {
-                        for (comment in str.indices) {
-                            li {
-                                +str[comment] // it doesn't work
-                            }
-                        }
-                    }
-                }
+                println(Data)
             }
+            catch (e : Exception)
+            {
+                println("Error")
+                println(e.message)
+            }
+
+            call.respondText("Check debug log")
         }
-        get("/delete")
-        {
-            val obj : CRUD = CRUD()
-            val temp = 3
-            obj.delete(temp)
-            call.respondFile(File("src/main/resources/static/CRUD.html"))
-        }
+
     }
 }

@@ -1,4 +1,4 @@
-package com.constructor
+package com.constructor.database
 
 import java.io.Closeable
 import java.sql.DriverManager
@@ -17,6 +17,20 @@ class Connection(private val coreConnection: java.sql.Connection) :
 }
 class CRUD
 {
+    fun create(id: Int, stringLine : String, num : Int, boolField : Boolean)
+    {
+        connect().use {
+            val st1 = it.createStatement()
+            val resultSet1 = st1.executeQuery(
+                """
+            INSERT INTO test_table VALUES ($id.ToString() , $stringLine , $num.toString() , $boolField.toString())
+            """.trimIndent()
+            )
+            resultSet1.close()
+            st1.close()
+        }
+    }
+
     fun read() : ArrayList<String>{
         connect().use {
             val st1 = it.createStatement()
@@ -43,8 +57,6 @@ class CRUD
                 DataToReturn.add(b)
                 DataToReturn.add(c)
                 DataToReturn.add(d)
-
-                println("$a \n  $b \n $c \n $d \n")
             }
             resultSet1.close()
             st1.close()
