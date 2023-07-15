@@ -2,6 +2,7 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val exposedVersion: String by project
+val postgresqlVersion: String by project
 
 plugins {
     kotlin("jvm") version "1.9.0"
@@ -20,7 +21,6 @@ application {
 repositories {
     mavenCentral()
 }
-
 // library
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
@@ -35,7 +35,8 @@ dependencies {
     // html
     implementation("io.ktor:ktor-server-freemarker:$ktor_version")
     implementation("io.ktor:ktor-server-html-builder:$ktor_version")
-
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("org.postgresql:postgresql:$postgresqlVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71")
 }
