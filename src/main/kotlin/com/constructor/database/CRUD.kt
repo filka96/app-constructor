@@ -18,7 +18,7 @@ class Connection(private val coreConnection: java.sql.Connection) :
 class CRUD
 {
     fun create(id: Int, stringLine : String, num : Int, boolField : Boolean)
-    {
+    { //
         connect().use {
             val st1 = it.createStatement()
             val resultSet1 = st1.executeQuery(
