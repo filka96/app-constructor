@@ -29,10 +29,9 @@ fun Application.configureRouting() {
         }
         get("/read")
         {
-
             val obj : CRUD = CRUD()
             val Data = obj.read()
-            // read
+
             try
             {
                 println(Data)

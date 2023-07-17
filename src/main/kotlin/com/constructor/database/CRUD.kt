@@ -63,6 +63,7 @@ class CRUD
 
     fun read() : MutableList<String>
     {
+        //done
         val result : MutableList<String> = mutableListOf()
 
        val querySql = """SELECT *
@@ -74,6 +75,10 @@ class CRUD
 
        while (data.next())
        {
+           result.add((data.getInt("id").toString()))
+           result.add(data.getString("stringfield"))
+           result.add((data.getInt("intfield").toString()))
+           result.add((data.getBoolean("boolfield").toString()))
             // mb Map?
        }
        return result
@@ -85,5 +90,4 @@ class CRUD
         preparedStatement.setInt(1, id)
         preparedStatement.executeUpdate()
     }
-
 }
