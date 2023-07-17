@@ -17,10 +17,10 @@ fun Application.configureRouting() {
         get("/create")
         {
             // input data for example
-            val id = 23
-            val stringLine = "good weather"
-            val number = 6666
-            val boolField = true
+            val id = 10
+            val stringLine = " weather"
+            val number = 67
+            val boolField = false
 
             val obj : CRUD = CRUD() // вызвали дефолтный конструктор
             obj.create(id, stringLine, number, boolField)
@@ -29,6 +29,7 @@ fun Application.configureRouting() {
         }
         get("/read")
         {
+
             val obj : CRUD = CRUD()
             val Data = obj.read()
             // read
@@ -44,6 +45,11 @@ fun Application.configureRouting() {
 
             call.respondText("Check debug log")
         }
-
+        get("/delete")
+        {
+            val obj : CRUD = CRUD()
+            obj.delete(5)
+            call.respondText { "Check debug log" }
+        }
     }
 }
