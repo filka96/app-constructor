@@ -7,6 +7,7 @@ val postgresqlVersion: String by project
 plugins {
     kotlin("jvm") version "1.9.0"
     id("io.ktor.plugin") version "2.3.2"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "com.constructor"
@@ -33,10 +34,14 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     // html
-    implementation("io.ktor:ktor-server-freemarker:$ktor_version")
+    //implementation("io.ktor:ktor-server-freemarker:$ktor_version")
     implementation("io.ktor:ktor-server-html-builder:$ktor_version")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71")
+    // json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    // uuid
+    implementation("com.eaio.uuid:uuid:3.2")
 }

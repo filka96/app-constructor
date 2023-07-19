@@ -6,8 +6,10 @@ import io.ktor.server.response.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.get
 import java.io.File
+import java.util.*
 
 fun Application.configureRouting() {
+    val myUuid = UUID.randomUUID()
     routing {
         get("/")
         {
@@ -15,7 +17,7 @@ fun Application.configureRouting() {
         }
         get("/create")
         {
-            TableModel.insert(65,"jaska", 2333, true)
+            TableModel.insert(myUuid,"jaska", 2333, true)
             call.respondText("Create\nCheck debug log")
         }
         get("/read")
@@ -25,11 +27,12 @@ fun Application.configureRouting() {
         }
         get("/delete")
         {
-            TableModel.delete(3)
+            TableModel.delete(myUuid)
             call.respondText { "Delete\nCheck debug log" }
         }
         get("/update")
         {
+            TableModel.update(myUuid, "zopa") //it must be error
             call.respondText{"Update\nCheck debug log"}
         }
     }
