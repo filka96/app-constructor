@@ -13,8 +13,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: Run build with Gradle Wrapper
       run: ./gradlew build
-    - name: Archive test results
-      uses: actions/upload-artifact@v3
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
       with:
-        name: test-report
-        path: build/reports/tests/test/index.html
+        files: |
+          uild/reports/tests/test/index.html
