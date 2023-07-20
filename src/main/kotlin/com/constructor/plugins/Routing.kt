@@ -32,7 +32,7 @@ fun Application.configureRouting() {
         }
         get("/update")
         {
-            TableModel.update(myUuid, "zopa") //it must be error
+            TableModel.update(myUuid, "zopa")
             call.respondText{"Update\nCheck debug log"}
         }
     }
