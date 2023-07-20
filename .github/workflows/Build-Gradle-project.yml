@@ -18,4 +18,4 @@ jobs:
       if: always()
       with:
         files: |
-          uild/reports/tests/test/index.html
+          build/reports/tests/test/index.html
