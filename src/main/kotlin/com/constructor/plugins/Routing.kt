@@ -1,10 +1,15 @@
 package com.constructor.plugins
 
+import com.constructor.database.TableDTO
 import com.constructor.database.TableModel
+import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
+import io.ktor.server.html.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.get
+import kotlinx.html.*
 import java.io.File
 import java.util.*
 
@@ -15,25 +20,55 @@ fun Application.configureRouting() {
         {
             call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
         }
-        get("/create")
+
+        route("/create")
         {
-            TableModel.insert(myUuid,"jaska", 2333, true)
-            call.respondText("Create\nCheck debug log")
+            post{
+                call.respondText("Create\nCheck debug log")
+                val jsonQuery = mutableListOf<TableDTO>()
+                jsonQuery.addAll(
+                    arrayOf(
+                        TableDTO(myUuid, "Jane", 876, true),
+                        TableDTO(myUuid, "John", 2424, false)
+                    )
+                )
+                call.respond(jsonQuery)
+            }
         }
+
         get("/read")
         {
-            println(TableModel.readAll())
-            call.respondText("Read\nCheck debug log")
+            val temp = TableModel.readAll()
+            call.respondHtml (HttpStatusCode.OK)
+            {
+                body {
+                    ul {
+                        for (el in temp) {
+                            +("id : " + (el.id).toString())
+                            +"                  "
+                            +("strf : " + (el.stringField))
+                            +"                 "
+                            +("int : " + (el.intfield).toString())
+                            +"                  "
+                            +("boolfield : " + (el.boolfield).toString())
+                            br {}
+                        }
+                    }
+                }
+            }
+            call.respond(TableDTO)
         }
-        get("/delete")
+        route("/delete")
         {
-            TableModel.delete(myUuid)
-            call.respondText { "Delete\nCheck debug log" }
+            post {
+                call.respondText { "Delete\nCheck debug log" }
+            }
         }
-        get("/update")
+        route("/update")
         {
-            TableModel.update(myUuid, "zopa") //it must be error
-            call.respondText{"Update\nCheck debug log"}
+            put {
+                call.respondText{"Update\nCheck debug log"}
+            }
         }
     }
 }

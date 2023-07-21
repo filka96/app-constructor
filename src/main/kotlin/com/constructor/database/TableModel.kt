@@ -1,7 +1,6 @@
 package com.constructor.database
 
 import com.constructor.db_conn
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -61,7 +60,7 @@ object TableModel : Table("test_table") {
         }
     }
 
-    // нужно ли писать перегрузки?
+    // возвращаем объект Table
     fun update(id : UUID, stringField: String)
     {
         transaction(db_conn){

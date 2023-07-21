@@ -5,6 +5,7 @@ val exposedVersion: String by project
 val postgresqlVersion: String by project
 
 plugins {
+    application
     kotlin("jvm") version "1.9.0"
     id("io.ktor.plugin") version "2.3.2"
     kotlin("plugin.serialization") version "1.9.0"
@@ -22,7 +23,7 @@ application {
 repositories {
     mavenCentral()
 }
-// library
+
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
@@ -41,7 +42,6 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71")
     // json
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    // uuid
-    implementation("com.eaio.uuid:uuid:3.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
 }

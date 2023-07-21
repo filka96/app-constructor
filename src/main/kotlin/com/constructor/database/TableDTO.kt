@@ -1,12 +1,26 @@
 package com.constructor.database
 
-import com.eaio.uuid.UUID
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.UUIDColumnType
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import java.util.*
 
-data class TableDTO (val id : java.util.UUID, val stringField : String,
-                     val intfield : Int, val boolfield : Boolean)
-                     //val jsonfield : MutableMap<String, String>)
+object UUIDSerializer : KSerializer<UUID> {
+    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): UUID {
+        return UUID.fromString(decoder.decodeString())
+    }
+
+    override fun serialize(encoder: Encoder, value: UUID) {
+        encoder.encodeString(value.toString())
+    }
+}
 
 @Serializable
-data class JsonField (val key : String, val value : String)
+data class TableDTO (@Serializable(with = UUIDSerializer::class) val id : UUID,
+                     val stringField : String,
+                     val intfield : Int, val boolfield : Boolean)
