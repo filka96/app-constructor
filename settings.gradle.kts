@@ -1,1 +1,1 @@
-rootProject.name = "Constructor_app"
+rootProject.name = "app-constructor"

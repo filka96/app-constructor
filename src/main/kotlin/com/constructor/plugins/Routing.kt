@@ -2,14 +2,12 @@ package com.constructor.plugins
 
 import com.constructor.database.TableDTO
 import com.constructor.database.TableModel
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
-import io.ktor.server.html.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.get
-import kotlinx.html.*
 import java.io.File
 import java.util.*
 
@@ -21,53 +19,50 @@ fun Application.configureRouting() {
             call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
         }
 
+        val storage = mutableListOf<TableDTO>()
+
         route("/create")
         {
-            post{
+            get {
                 call.respondText("Create\nCheck debug log")
-                val jsonQuery = mutableListOf<TableDTO>()
-                jsonQuery.addAll(
-                    arrayOf(
-                        TableDTO(myUuid, "Jane", 876, true),
-                        TableDTO(myUuid, "John", 2424, false)
-                    )
-                )
-                call.respond(jsonQuery)
+            }
+            post{
+                val jsonQuery = call.receive<TableDTO>()
+                storage.add(jsonQuery)
+                TableModel.Create(storage)
+                call.respondText("" , status = HttpStatusCode.Created)
             }
         }
 
         get("/read")
         {
             val temp = TableModel.readAll()
-            call.respondHtml (HttpStatusCode.OK)
-            {
-                body {
-                    ul {
-                        for (el in temp) {
-                            +("id : " + (el.id).toString())
-                            +"                  "
-                            +("strf : " + (el.stringField))
-                            +"                 "
-                            +("int : " + (el.intfield).toString())
-                            +"                  "
-                            +("boolfield : " + (el.boolfield).toString())
-                            br {}
-                        }
-                    }
-                }
-            }
-            call.respond(TableDTO)
+            call.respond(temp)
         }
-        route("/delete")
-        {
-            post {
-                call.respondText { "Delete\nCheck debug log" }
+        route("/delete") {
+            delete {
+                val jsonQuery = call.receive<TableDTO>()
+                storage.add(jsonQuery)
+
+                var forDeleteId = myUuid
+                for(el in storage) {
+                    forDeleteId = el.id
+                }
+
+                println(forDeleteId)
+                TableModel.Delete(forDeleteId)
+
+                call.respondText("Delete\nCheck debug log", status = HttpStatusCode.OK)
             }
         }
         route("/update")
         {
             put {
-                call.respondText{"Update\nCheck debug log"}
+                val jsonQuery = call.receive<TableDTO>()
+                storage.add(jsonQuery)
+                TableModel.Update(storage)
+
+                call.respondText("Update\nCheck debug log", status = HttpStatusCode.OK)
             }
         }
     }

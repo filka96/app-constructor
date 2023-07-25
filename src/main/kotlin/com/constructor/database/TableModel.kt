@@ -21,7 +21,6 @@ object TableModel : Table("test_table") {
             stringField = rr[TableModel.strfield],
             intfield = rr[TableModel.intField],
             boolfield = rr[TableModel.boolField])
-            //jsonfield = rr[TableModel.jsonfield]
     }
 
     // crud
@@ -39,20 +38,27 @@ object TableModel : Table("test_table") {
         return temp
     }
 
-    fun insert(id : UUID, strField : String, intfield : Int, boolfield : Boolean)
+    fun Create(js : MutableList<TableDTO>)
     {
-        transaction (db_conn){
-            TableModel.insert {
-                it[TableModel.id] = id
-                it[TableModel.strfield] = strField
-                it[intField] = intfield
-                it[boolField] = boolfield
+        for (el in js) {
+            val temp_1 = el.id
+            val temp_2 = el.stringField
+            val temp_3 = el.intfield
+            val temp_4 = el.boolfield
+
+            transaction(db_conn) {
+                TableModel.insert {
+                    it[TableModel.id] = temp_1
+                    it[TableModel.strfield] = temp_2
+                    it[intField] = temp_3
+                    it[boolField] = temp_4
+                }
+                commit()
             }
-            commit()
         }
     }
 
-    fun delete(id : UUID)
+    fun Delete(id : UUID)
     {
         transaction(db_conn) {
             TableModel.deleteWhere { TableModel.id eq id }
@@ -60,14 +66,22 @@ object TableModel : Table("test_table") {
         }
     }
 
-    // возвращаем объект Table
-    fun update(id : UUID, stringField: String)
+    fun Update(js : MutableList<TableDTO>)
     {
-        transaction(db_conn){
-            TableModel.update({TableModel.id eq id}){
-                it[TableModel.strfield] = stringField
+        for (el in js) {
+            val temp_1 = el.id
+            val temp_2 = el.stringField
+            val temp_3 = el.intfield
+            val temp_4 = el.boolfield
+
+            transaction(db_conn) {
+                TableModel.update({ TableModel.id eq temp_1 }) {
+                    it[TableModel.strfield] = temp_2
+                    it[intField] = temp_3
+                    it[boolField] = temp_4
+                }
+                commit()
             }
-            commit()
         }
     }
 }
