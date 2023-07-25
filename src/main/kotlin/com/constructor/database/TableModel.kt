@@ -11,8 +11,6 @@ object TableModel : Table("test_table") {
     val strfield = varchar("strfield", 30)
     val intField = integer("intfield")
     val boolField = bool("boolfield")
-    //var jsonfield =
-    //val jsonstring = Json.decodeFromString<JsonField>(jsonfield)
     override val primaryKey = PrimaryKey(id, name = "PK_test_table_id")
 
     fun RouteToDTO (rr : ResultRow) : TableDTO
@@ -65,7 +63,7 @@ object TableModel : Table("test_table") {
             commit()
         }
     }
-//
+
     fun Update(js : MutableList<TableDTO>)
     {
         for (el in js) {
