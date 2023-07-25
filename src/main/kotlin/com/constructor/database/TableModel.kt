@@ -65,7 +65,7 @@ object TableModel : Table("test_table") {
             commit()
         }
     }
-
+//
     fun Update(js : MutableList<TableDTO>)
     {
         for (el in js) {
