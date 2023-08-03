@@ -5,7 +5,7 @@ interface ICalculateResult<T> {
 
   fun calculateResult(dataWidget: T): Any{
     // логика подсчета результатов
-    return "Fish"
+    return "CalculeResult"
   }
 
   fun getResult(result : Any) : Any{

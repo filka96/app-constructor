@@ -22,5 +22,5 @@ object UUIDSerializer : KSerializer<UUID> {
 
 @Serializable
 data class TableDTO (@Serializable(with = UUIDSerializer::class) val id : UUID,
-                     val stringField : String,
+                     val stringfield : String,
                      val intfield : Int, val boolfield : Boolean)

@@ -1,53 +1,53 @@
 package com.constructor.database
 
-import com.constructor.db_conn
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
+import com.constructor.db_conn as db_conn1
 
 object TableModel : Table("test_table") {
-    val id = uuid("id")// must be uuid
-    val strfield = varchar("strfield", 30)
+    val id = uuid("id")
+    val strField = varchar("strfield", 30)
     val intField = integer("intfield")
     val boolField = bool("boolfield")
     override val primaryKey = PrimaryKey(id, name = "PK_test_table_id")
 
-    fun RouteToDTO (rr : ResultRow) : TableDTO
+    fun routeToDTO (rr : ResultRow) : TableDTO
     {
-        return TableDTO(id = rr[TableModel.id],
-            stringField = rr[TableModel.strfield],
-            intfield = rr[TableModel.intField],
-            boolfield = rr[TableModel.boolField])
+        return TableDTO(id = rr[id],
+            stringfield = rr[strField],
+            intfield = rr[intField],
+            boolfield = rr[boolField])
     }
 
     // crud
     fun readAll() : MutableList<TableDTO>
     {
         val temp : MutableList<TableDTO> = mutableListOf()
-        transaction (db_conn){
+        transaction (db_conn1){
             val query = TableModel.selectAll()
             val result = query.toList()
             for(element in result)
             {
-                temp.add(RouteToDTO(element))
+                temp.add(routeToDTO(element))
             }
         }
         return temp
     }
 
-    fun Create(js : MutableList<TableDTO>)
+    fun create(js : MutableList<TableDTO>)
     {
         for (el in js) {
             val temp_1 = el.id
-            val temp_2 = el.stringField
+            val temp_2 = el.stringfield
             val temp_3 = el.intfield
             val temp_4 = el.boolfield
 
-            transaction(db_conn) {
+            transaction(db_conn1) {
                 TableModel.insert {
-                    it[TableModel.id] = temp_1
-                    it[TableModel.strfield] = temp_2
+                    it[id] = temp_1
+                    it[strField] = temp_2
                     it[intField] = temp_3
                     it[boolField] = temp_4
                 }
@@ -56,25 +56,25 @@ object TableModel : Table("test_table") {
         }
     }
 
-    fun Delete(id : UUID)
+    fun delete(id : UUID)
     {
-        transaction(db_conn) {
+        transaction(db_conn1) {
             TableModel.deleteWhere { TableModel.id eq id }
             commit()
         }
     }
 
-    fun Update(js : MutableList<TableDTO>)
+    fun update(js : MutableList<TableDTO>)
     {
         for (el in js) {
             val temp_1 = el.id
-            val temp_2 = el.stringField
+            val temp_2 = el.stringfield
             val temp_3 = el.intfield
             val temp_4 = el.boolfield
 
-            transaction(db_conn) {
+            transaction(db_conn1) {
                 TableModel.update({ TableModel.id eq temp_1 }) {
-                    it[TableModel.strfield] = temp_2
+                    it[strField] = temp_2
                     it[intField] = temp_3
                     it[boolField] = temp_4
                 }

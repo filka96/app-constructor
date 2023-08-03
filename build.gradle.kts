@@ -5,23 +5,23 @@ val exposedVersion: String by project
 val postgresqlVersion: String by project
 
 plugins {
-    application
     kotlin("jvm") version "1.9.0"
-    id("io.ktor.plugin") version "2.3.2"
+    kotlin("multiplatform") version "1.9.0" apply false
     kotlin("plugin.serialization") version "1.9.0"
+    id("io.ktor.plugin") version "2.3.2"
 }
 
-group = "com.constructor"
-version = "0.0.1"
-application {
-    mainClass.set("com.constructor.ApplicationKt")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = "8.2.1"
 }
 
-repositories {
-    mavenCentral()
+allprojects {
+    version = "0.1.1" // todo: generate by git version
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 dependencies {

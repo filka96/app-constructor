@@ -29,7 +29,7 @@ fun Application.configureRouting() {
             post{
                 val jsonQuery = call.receive<TableDTO>()
                 storage.add(jsonQuery)
-                TableModel.Create(storage)
+                TableModel.create(storage)
                 call.respondText("" , status = HttpStatusCode.Created)
             }
         }
@@ -50,7 +50,7 @@ fun Application.configureRouting() {
                 }
 
                 println(forDeleteId)
-                TableModel.Delete(forDeleteId)
+                TableModel.delete(forDeleteId)
 
                 call.respondText("Delete\nCheck debug log", status = HttpStatusCode.OK)
             }
@@ -60,7 +60,7 @@ fun Application.configureRouting() {
             put {
                 val jsonQuery = call.receive<TableDTO>()
                 storage.add(jsonQuery)
-                TableModel.Update(storage)
+                TableModel.update(storage)
 
                 call.respondText("Update\nCheck debug log", status = HttpStatusCode.OK)
             }
