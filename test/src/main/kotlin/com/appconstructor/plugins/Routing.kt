@@ -1,41 +1,63 @@
 package com.appconstructor.plugins
 
+import com.appconstructor.database.TableDTO
 import com.appconstructor.database.TableModel
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.response.respondFile
-import io.ktor.server.response.respondText
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.routing.*
+import io.ktor.server.response.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 fun Application.configureRouting() {
-  val myUuid = UUID.randomUUID()
-  routing {
-    get("/")
-    {
-      call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
+    val myUuid = UUID.randomUUID()
+    routing {
+        get("/") {
+            call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
+        }
+
+        val storage = mutableListOf<TableDTO>()
+
+        route("/create") {
+            get {
+                call.respondText("Create\nCheck debug log")
+            }
+
+            post{
+                val jsonQuery = call.receive<TableDTO>()
+                storage.add(jsonQuery)
+                TableModel.create(storage)
+                call.respondText("" , status = HttpStatusCode.Created)
+            }
+        }
+
+        get("/read") {
+            val temp = TableModel.readAll()
+            call.respond(temp)
+        }
+
+        delete("/delete") {
+            val jsonQuery = call.receive<TableDTO>()
+            storage.add(jsonQuery)
+
+            var forDeleteId = myUuid
+            for(el in storage) {
+                forDeleteId = el.id
+            }
+
+            println(forDeleteId)
+            TableModel.delete(forDeleteId)
+
+            call.respondText("Delete\nCheck debug log", status = HttpStatusCode.OK)
+        }
+        put("/update"){
+            val jsonQuery = call.receive<TableDTO>()
+            storage.add(jsonQuery)
+            TableModel.update(storage)
+
+            call.respondText("Update\nCheck debug log", status = HttpStatusCode.OK)
+        }
     }
-    get("/create")
-    {
-      TableModel.insert(myUuid, "jaska", 2333, true)
-      call.respondText("Create\nCheck debug log")
-    }
-    get("/read")
-    {
-      println(TableModel.readAll())
-      call.respondText("Read\nCheck debug log")
-    }
-    get("/delete")
-    {
-      TableModel.delete(myUuid)
-      call.respondText { "Delete\nCheck debug log" }
-    }
-    get("/update")
-    {
-      TableModel.update(myUuid, "zopa")
-      call.respondText { "Update\nCheck debug log" }
-    }
-  }
 }

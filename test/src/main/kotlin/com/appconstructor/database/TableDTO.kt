@@ -1,14 +1,9 @@
 package com.appconstructor.database
 
 import kotlinx.serialization.Serializable
-
-data class TableDTO(
-  val id: java.util.UUID,
-  val stringField: String,
-  val intfield: Int,
-  val boolfield: Boolean
-)
-//val jsonfield : MutableMap<String, String>)
+import java.util.*
 
 @Serializable
-data class JsonField(val key: String, val value: String)
+data class TableDTO (@Serializable(with = UUIDSerial.UUIDSerializer::class) val id : UUID,
+                     val stringfield : String,
+                     val intfield : Int, val boolfield : Boolean)

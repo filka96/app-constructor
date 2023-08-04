@@ -1,4 +1,4 @@
-package com.constructor.iPlugin
+package com.appconstructor.iPlugin
 
 import kotlinx.html.HTML
 
