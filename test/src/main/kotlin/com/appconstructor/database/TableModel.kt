@@ -1,10 +1,9 @@
 package com.appconstructor.database
 
-import java.sql.SQLException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.UUID
+import org.jetbrains.exposed.sql.transactions.*
+import java.util.*
 import com.appconstructor.db_conn as db_conn1
 
 object TableModel : Table("test_table") {
@@ -47,17 +46,12 @@ object TableModel : Table("test_table") {
     }
 
     fun create(js : TableDTO) {
-        val temp1 = js.id
-        val temp2 = js.strfield
-        val temp3 = js.intfield
-        val temp4 = js.boolfield
-
         transaction(db_conn1) {
             TableModel.insert {
-                it[id] = temp1
-                it[strField] = temp2
-                it[intField] = temp3
-                it[boolField] = temp4
+                it[id] = js.id
+                it[strField] = js.strfield
+                it[intField] = js.intfield
+                it[boolField] = js.boolfield
             }
             commit()
         }
@@ -71,16 +65,12 @@ object TableModel : Table("test_table") {
 
     fun update(js : TableDTO) {
         // может инициализацию в отдельный метод засунуть?
-        val temp1 = js.id
-        val temp2 = js.strfield
-        val temp3 = js.intfield
-        val temp4 = js.boolfield
 
         transaction(db_conn1) {
-            TableModel.update({ TableModel.id eq temp1 }) {
-                it[strField] = temp2
-                it[intField] = temp3
-                it[boolField] = temp4
+            TableModel.update({ TableModel.id eq js.id }) {
+                it[strField] = js.strfield
+                it[intField] = js.intfield
+                it[boolField] = js.boolfield
             }
             commit()
         }
