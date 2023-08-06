@@ -1,11 +1,11 @@
-package com.constructor
+package com.appconstructor
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 
 fun Application.configureSerialization() {
-    install(ContentNegotiation) {
-        json()
-    }
+  install(ContentNegotiation) {
+    json()
+  }
 }

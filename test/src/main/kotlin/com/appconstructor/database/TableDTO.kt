@@ -5,5 +5,5 @@ import java.util.*
 
 @Serializable
 data class TableDTO (@Serializable(with = UUIDSerial.UUIDSerializer::class) val id : UUID,
-                     val stringfield : String,
+                     val strfield : String,
                      val intfield : Int, val boolfield : Boolean)

@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.Database
 val db_conn = Database.connect(
   "jdbc:postgresql://localhost:5432/Test",
   driver = "org.postgresql.Driver",
-  user = "...",
-  password = "..."
+  user = "postgres",
+  password = "tyX7~Lp3+"
 )
 
 fun main() {
@@ -24,4 +24,5 @@ fun main() {
 
 fun Application.module() {
   configureRouting()
+  configureSerialization()
 }

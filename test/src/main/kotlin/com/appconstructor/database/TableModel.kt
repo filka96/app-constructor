@@ -1,5 +1,6 @@
 package com.appconstructor.database
 
+import java.sql.SQLException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -15,7 +16,7 @@ object TableModel : Table("test_table") {
 
     private fun rowToDTO (rr : ResultRow) : TableDTO {
         return TableDTO(id = rr[id],
-            stringfield = rr[strField],
+            strfield = rr[strField],
             intfield = rr[intField],
             boolfield = rr[boolField])
     }
@@ -32,47 +33,56 @@ object TableModel : Table("test_table") {
         return temp
     }
 
-    fun create(js : MutableList<TableDTO>) {
-        for (el in js) {
-            val temp1 = el.id
-            val temp2 = el.stringfield
-            val temp3 = el.intfield
-            val temp4 = el.boolfield
-
-            transaction(db_conn1) {
-                TableModel.insert {
-                    it[id] = temp1
-                    it[strField] = temp2
-                    it[intField] = temp3
-                    it[boolField] = temp4
-                }
-                commit()
+    fun readOneRow(id: UUID) : MutableList<TableDTO>{
+        val temp : MutableList<TableDTO> = mutableListOf()
+        transaction(db_conn1){
+            val query = TableModel.select(TableModel.id eq id)
+            val result = query.toList()
+            for (element in result)
+            {
+                temp.add(rowToDTO(element))
             }
         }
+        return temp
     }
 
-    fun delete(id : UUID) {
+    fun create(js : TableDTO) {
+        val temp1 = js.id
+        val temp2 = js.strfield
+        val temp3 = js.intfield
+        val temp4 = js.boolfield
+
         transaction(db_conn1) {
-            TableModel.deleteWhere { TableModel.id eq id }
+            TableModel.insert {
+                it[id] = temp1
+                it[strField] = temp2
+                it[intField] = temp3
+                it[boolField] = temp4
+            }
             commit()
         }
     }
 
-    fun update(js : MutableList<TableDTO>) {
-        for (el in js) {
-            val temp1 = el.id
-            val temp2 = el.stringfield
-            val temp3 = el.intfield
-            val temp4 = el.boolfield
+    fun delete(id : UUID){
+        transaction(db_conn1) {
+            TableModel.deleteWhere { (TableModel.id eq id) }
+        }
+    }
 
-            transaction(db_conn1) {
-                TableModel.update({ TableModel.id eq temp1 }) {
-                    it[strField] = temp2
-                    it[intField] = temp3
-                    it[boolField] = temp4
-                }
-                commit()
+    fun update(js : TableDTO) {
+        // может инициализацию в отдельный метод засунуть?
+        val temp1 = js.id
+        val temp2 = js.strfield
+        val temp3 = js.intfield
+        val temp4 = js.boolfield
+
+        transaction(db_conn1) {
+            TableModel.update({ TableModel.id eq temp1 }) {
+                it[strField] = temp2
+                it[intField] = temp3
+                it[boolField] = temp4
             }
+            commit()
         }
     }
 }
