@@ -1,7 +1,6 @@
 package com.appconstructor.plugins
 
 import com.appconstructor.database.*
-import com.appconstructor.databaseProperties.DatabaseProperties
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.application.Application
@@ -21,10 +20,6 @@ fun Application.configureRouting() {
         route("/test") {
             get{
                 val temp = TableModel.readAll()
-                val secret : DatabaseProperties =
-                    DatabaseProperties("test/src/main/resources/application.properties")
-                println(secret.getPassword())
-                println(secret.getLogin())
                 call.respond(temp)
             }
             get("{id}"){
@@ -41,7 +36,7 @@ fun Application.configureRouting() {
                 val jsonQuery = call.receive<TableDTO>()
                 val isUpdated = TableModel.update(jsonQuery)
 
-                if(isUpdated == 1) {
+                if(isUpdated == 1){
                     call.respond(status = HttpStatusCode.OK, jsonQuery)
                 }
                 else{

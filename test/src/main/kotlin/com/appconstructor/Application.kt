@@ -8,7 +8,7 @@ import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
 
 val secret =
-  DatabaseProperties("test/src/main/resources/application.properties")
+  DatabaseProperties("test/src/main/resources/datasource.password.properties")
 
 val db_conn = Database.connect(
   "jdbc:postgresql://localhost:5432/Test",
