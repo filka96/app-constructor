@@ -1,4 +1,4 @@
-package com.appconstructor.iPlugin
+package com.appconstructor.pluginLibrary
 
 class PluginManager {
   fun enablePlugin(plugin : IPlugin) : Boolean{

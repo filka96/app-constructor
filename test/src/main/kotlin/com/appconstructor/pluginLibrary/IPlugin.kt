@@ -1,4 +1,4 @@
-package com.appconstructor.iPlugin
+package com.appconstructor.pluginLibrary
 
 interface IPlugin {
     // плагин реализует только одну сущность!
@@ -19,6 +19,5 @@ interface IPlugin {
     fun getType(type: PluginType) : String
 
     // возвращает всю информацию о плагине
-    fun getPluginInfo(name: String, type : PluginType, authorName : String,
-                      isAvailable: Boolean, description: String) : Map<String, Any>
+    fun getPluginInfo() : Map<String, Any>
 }

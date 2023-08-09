@@ -1,4 +1,4 @@
-package com.constructor.iPlugin
+package com.appconstructor.pluginLibrary
 
 class Result{
   // должен унаследовать интерфейс ICalculatePlugin
