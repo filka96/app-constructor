@@ -1,41 +1,59 @@
 package com.appconstructor.plugins
 
-import com.appconstructor.database.TableModel
+import com.appconstructor.database.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.response.respond
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
-import io.ktor.server.response.respondFile
-import io.ktor.server.response.respondText
+import io.ktor.server.request.receive
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
-import java.io.File
+import io.ktor.server.util.getOrFail
 import java.util.UUID
 
 fun Application.configureRouting() {
-  val myUuid = UUID.randomUUID()
-  routing {
-    get("/")
-    {
-      call.respondFile(File("src/main/resources/HTML_templates/CRUD.html"))
+    routing {
+        route("/test") {
+            get{
+                val temp = TableModel.readAll()
+                call.respond(temp)
+            }
+            get("{id}"){
+                val query = call.parameters.getOrFail<UUID>("id")
+                val dbAnswer = TableModel.readOneRow(query)
+                call.respond(HttpStatusCode.OK, dbAnswer)
+            }
+            post{
+                val jsonQuery = call.receive<TableDTO>()
+                TableModel.create(jsonQuery)
+                call.respond(status = HttpStatusCode.Created, jsonQuery)
+            }
+            put{
+                val jsonQuery = call.receive<TableDTO>()
+                val isUpdated = TableModel.update(jsonQuery)
+
+                if(isUpdated == 1){
+                    call.respond(status = HttpStatusCode.OK, jsonQuery)
+                }
+                else{
+                    call.respond(status = HttpStatusCode.NotFound, "")
+                }
+            }
+            delete{
+                val jsonQuery = call.receive<TableDTO>()
+                val isDeleted = TableModel.delete(jsonQuery.id)
+
+                if(isDeleted == 1){
+                    call.respond(status = HttpStatusCode.OK, "")
+                }
+                else{
+                    call.respond(status = HttpStatusCode.NotFound, "")
+                }
+            }
+        }
     }
-    get("/create")
-    {
-      TableModel.insert(myUuid, "jaska", 2333, true)
-      call.respondText("Create\nCheck debug log")
-    }
-    get("/read")
-    {
-      println(TableModel.readAll())
-      call.respondText("Read\nCheck debug log")
-    }
-    get("/delete")
-    {
-      TableModel.delete(myUuid)
-      call.respondText { "Delete\nCheck debug log" }
-    }
-    get("/update")
-    {
-      TableModel.update(myUuid, "zopa")
-      call.respondText { "Update\nCheck debug log" }
-    }
-  }
 }

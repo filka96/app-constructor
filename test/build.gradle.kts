@@ -36,6 +36,8 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71") // todo: move version to Versions
   // json
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1") // todo: move version to Versions
+  implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
+  implementation("io.ktor:ktor-server-content-negotiation:${Versions.ktor}")
   // uuid
   implementation("com.eaio.uuid:uuid:3.2") // todo: move version to Versions
 }
