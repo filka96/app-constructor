@@ -2,7 +2,7 @@ package com.appconstructor.database
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
 import com.appconstructor.db_conn as db_conn1
 
