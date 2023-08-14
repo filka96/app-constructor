@@ -1,6 +1,10 @@
 package com.appconstructor.plugins
 
-import com.appconstructor.database.*
+import com.appconstructor.app.database.entity.AppModel
+import com.appconstructor.lobby.LobbyDTO
+import com.appconstructor.test.database.model.TableDTO
+import com.appconstructor.test.database.entity.TableModel
+import com.appconstructor.lobby.entity.LobbyModel
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.application.Application
@@ -17,6 +21,27 @@ import java.util.UUID
 
 fun Application.configureRouting() {
     routing {
+        route("/lobby"){
+            route("{id}"){
+                get{
+                    val idParameter = call.parameters.getOrFail<UUID>("id")
+                    val lobby = LobbyModel.getLobby(idParameter)
+                    call.respond(status = HttpStatusCode.OK, lobby)
+                }
+                get("/listApp"){
+                    val appList = AppModel.getAllApp()
+                    call.respond(HttpStatusCode.OK, appList)
+                }
+                post("/createApp"){
+                    call.respond(HttpStatusCode.OK, "")
+                }
+            }
+            post("/create"){
+                val jsonQuery = call.receive<LobbyDTO>()
+                LobbyModel.createLobby(jsonQuery)
+                call.respond(HttpStatusCode.Created, "")
+            }
+        }
         route("/test") {
             get{
                 val temp = TableModel.readAll()
@@ -43,9 +68,9 @@ fun Application.configureRouting() {
                     call.respond(status = HttpStatusCode.NotFound, "")
                 }
             }
-            delete{
-                val jsonQuery = call.receive<TableDTO>()
-                val isDeleted = TableModel.delete(jsonQuery.id)
+            delete("{id}"){
+                val jsonQuery = call.parameters.getOrFail<UUID>("id")
+                val isDeleted = TableModel.delete(jsonQuery)
 
                 if(isDeleted == 1){
                     call.respond(status = HttpStatusCode.OK, "")
