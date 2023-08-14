@@ -1,4 +1,4 @@
-package com.appconstructor.pluginLibrary
+package com.appconstructor.plugin
 
 class PluginDbManager {
   fun addToPluginDatabase(plugin : IPlugin) {}

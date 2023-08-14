@@ -1,4 +1,4 @@
-package com.appconstructor.pluginLibrary
+package com.appconstructor.plugin
 
 interface ICalculateResult<T> {
   fun calculateResult(dataWidget: T) : Any

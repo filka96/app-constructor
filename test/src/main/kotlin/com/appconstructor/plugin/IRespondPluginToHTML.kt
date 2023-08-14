@@ -1,4 +1,4 @@
-package com.appconstructor.pluginLibrary
+package com.appconstructor.plugin
 
 interface IRespondPluginToHTML {
   // отображает плагос в HTML у пользака

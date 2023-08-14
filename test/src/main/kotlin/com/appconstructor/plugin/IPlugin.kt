@@ -1,4 +1,4 @@
-package com.appconstructor.pluginLibrary
+package com.appconstructor.plugin
 
 interface IPlugin {
     // плагин реализует только одну сущность!
@@ -16,7 +16,7 @@ interface IPlugin {
     fun getDescription() : String
 
     // задает тип плагина из Enum
-    fun getType(type: PluginType) : String
+    fun getType() : String
 
     // возвращает всю информацию о плагине
     fun getPluginInfo() : Map<String, Any>
