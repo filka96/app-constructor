@@ -1,5 +1,6 @@
-package com.appconstructor.database
+package com.appconstructor.test.database.model
 
+import com.appconstructor.UUIDSerial
 import kotlinx.serialization.Serializable
 import java.util.UUID
 

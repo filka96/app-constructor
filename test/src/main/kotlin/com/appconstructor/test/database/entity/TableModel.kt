@@ -1,10 +1,11 @@
-package com.appconstructor.database
+package com.appconstructor.test.database.entity
 
+import com.appconstructor.test.database.model.TableDTO
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
-import com.appconstructor.db_conn as db_conn1
+import com.appconstructor.db_connTest as db_conn1
 
 object TableModel : Table("test_table") {
     private val id = uuid("id")
@@ -32,7 +33,7 @@ object TableModel : Table("test_table") {
     fun readOneRow(id: UUID) : MutableList<TableDTO>{
         val temp : MutableList<TableDTO> = mutableListOf()
         transaction(db_conn1){
-            val query = TableModel.select{(TableModel.id eq id)}
+            val query = TableModel.select{ (TableModel.id eq id)}
             for (element in query) {
                 temp.add(rowToDTO(element))
             }
@@ -40,7 +41,7 @@ object TableModel : Table("test_table") {
         return temp
     }
     fun create(js : TableDTO) {
-        transaction(db_conn1) { TableModel.insert {
+        transaction(db_conn1) { TableModel.insert{
                 it[id] = js.id
                 it[strField] = js.strfield
                 it[intField] = js.intfield
