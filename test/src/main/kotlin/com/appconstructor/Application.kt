@@ -1,5 +1,6 @@
 package com.appconstructor
 
+import com.appconstructor.app.database.entity.CrudApp
 import com.appconstructor.serialization.configureSerialization
 import com.appconstructor.plugins.configureRouting
 import com.appconstructor.propertyReaper.PropertyReader
