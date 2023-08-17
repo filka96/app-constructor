@@ -1,6 +1,6 @@
 package com.appconstructor.customer.database.model
 
-import com.appconstructor.UUIDSerial
+import com.appconstructor.serialization.UUIDSerial
 import java.util.UUID
 import kotlinx.serialization.Serializable
 

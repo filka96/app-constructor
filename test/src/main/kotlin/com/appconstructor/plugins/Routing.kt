@@ -1,10 +1,15 @@
 package com.appconstructor.plugins
 
-import com.appconstructor.app.database.entity.AppModel
-import com.appconstructor.lobby.LobbyDTO
-import com.appconstructor.test.database.model.TableDTO
-import com.appconstructor.test.database.entity.TableModel
-import com.appconstructor.lobby.entity.LobbyModel
+import com.appconstructor.app.database.entity.getAllApp
+import com.appconstructor.lobby.model.LobbyDTO
+import com.appconstructor.lobby.entity.createLobby
+import com.appconstructor.test.database.model.TableTestDTO
+import com.appconstructor.lobby.entity.getLobby
+import com.appconstructor.test.database.entity.createRow
+import com.appconstructor.test.database.entity.deleteRow
+import com.appconstructor.test.database.entity.getAllTableTest
+import com.appconstructor.test.database.entity.getTableTest
+import com.appconstructor.test.database.entity.updateRow
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.application.Application
@@ -25,12 +30,23 @@ fun Application.configureRouting() {
             route("{id}"){
                 get{
                     val idParameter = call.parameters.getOrFail<UUID>("id")
-                    val lobby = LobbyModel.getLobby(idParameter)
-                    call.respond(status = HttpStatusCode.OK, lobby)
+                    val result = getLobby(idParameter)
+                    if (result != null) {
+                        call.respond(status = HttpStatusCode.OK, "${result.id} " +
+                                                                 "${result.title}")
+                    }
+                    else{
+                        call.respond(status = HttpStatusCode.NotFound, "")
+                    }
                 }
                 get("/listApp"){
-                    val appList = AppModel.getAllApp()
-                    call.respond(HttpStatusCode.OK, appList)
+                    val result = getAllApp()
+                    if (result != null ){
+                        call.respond(HttpStatusCode.OK, result)
+                    }
+                    else{
+                        call.respond(status = HttpStatusCode.NotFound, "")
+                    }
                 }
                 post("/createApp"){
                     call.respond(HttpStatusCode.OK, "")
@@ -38,41 +54,54 @@ fun Application.configureRouting() {
             }
             post("/create"){
                 val jsonQuery = call.receive<LobbyDTO>()
-                LobbyModel.createLobby(jsonQuery)
+                createLobby(jsonQuery)
                 call.respond(HttpStatusCode.Created, "")
             }
         }
         route("/test") {
             get{
-                val temp = TableModel.readAll()
-                call.respond(temp)
+                val temp = getAllTableTest()
+                if(temp != null){
+                    call.respond(status = HttpStatusCode.OK, temp)
+                }
+                else{
+                    call.respond(status = HttpStatusCode.BadRequest, "")
+                }
             }
             get("{id}"){
-                val query = call.parameters.getOrFail<UUID>("id")
-                val dbAnswer = TableModel.readOneRow(query)
-                call.respond(HttpStatusCode.OK, dbAnswer)
+                val idParameter = call.parameters.getOrFail<UUID>("id")
+                val result = getTableTest(idParameter)
+                if(result != null){
+                    call.respond(HttpStatusCode.OK, "${result.strField} " +
+                                                    "${result.intField} " +
+                                                    "${result.boolField}")
+                }
+                else{
+                    call.respond(HttpStatusCode.NotFound, "")
+                }
             }
             post{
-                val jsonQuery = call.receive<TableDTO>()
-                TableModel.create(jsonQuery)
+                val jsonQuery = call.receive<TableTestDTO>()
+                createRow(jsonQuery)
                 call.respond(status = HttpStatusCode.Created, jsonQuery)
             }
-            put{
-                val jsonQuery = call.receive<TableDTO>()
-                val isUpdated = TableModel.update(jsonQuery)
+            put("{id}"){
+                val idParameter = call.parameters.getOrFail<UUID>("id")
+                val jsonQuery = call.receive<TableTestDTO>()
+                val isUpdated = updateRow(idParameter, jsonQuery)
 
-                if(isUpdated == 1){
-                    call.respond(status = HttpStatusCode.OK, jsonQuery)
+                if(isUpdated){
+                    call.respond(status = HttpStatusCode.Accepted, "")
                 }
                 else{
                     call.respond(status = HttpStatusCode.NotFound, "")
                 }
             }
             delete("{id}"){
-                val jsonQuery = call.parameters.getOrFail<UUID>("id")
-                val isDeleted = TableModel.delete(jsonQuery)
+                val idParameter = call.parameters.getOrFail<UUID>("id")
+                val result = deleteRow(idParameter)
 
-                if(isDeleted == 1){
+                if(result){
                     call.respond(status = HttpStatusCode.OK, "")
                 }
                 else{

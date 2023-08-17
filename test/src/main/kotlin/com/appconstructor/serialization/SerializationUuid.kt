@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.serialization
 
 import java.util.UUID
 import kotlinx.serialization.KSerializer
