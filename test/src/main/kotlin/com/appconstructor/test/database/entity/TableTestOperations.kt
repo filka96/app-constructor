@@ -1,6 +1,6 @@
 package com.appconstructor.test.database.entity
 
-import com.appconstructor.db_connTest
+import com.appconstructor.dbTest
 import com.appconstructor.test.database.model.TableTestDTO
 import java.util.UUID
 import org.jetbrains.exposed.sql.SizedIterable
@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun getAllTableTest() : List<TableTestModel>?{
   var data : SizedIterable<TableTestModel>? = null
-  transaction(db_connTest){
+  transaction(dbTest){
     data = TableTestModel.all()
   }
   return data?.toList()
@@ -16,14 +16,14 @@ fun getAllTableTest() : List<TableTestModel>?{
 
 fun getTableTest(idParameter : UUID) : TableTestModel? {
   var data : TableTestModel? = null
-  transaction(db_connTest){
+  transaction(dbTest){
     data = TableTestModel.findById(idParameter)
   }
   return data
 }
 
 fun createRow(jsonData : TableTestDTO) {
-  transaction(db_connTest){
+  transaction(dbTest){
     TableTestModel.new {
       strField = jsonData.strField
       intField = jsonData.intField
@@ -35,7 +35,7 @@ fun createRow(jsonData : TableTestDTO) {
 
 fun updateRow(idParameter: UUID, jsonData : TableTestDTO) : Boolean{
   var isUpdated = false
-  transaction(db_connTest){
+  transaction(dbTest){
     val data = TableTestModel.findById(idParameter)
     if(data != null){
       isUpdated = true
@@ -52,7 +52,7 @@ fun updateRow(idParameter: UUID, jsonData : TableTestDTO) : Boolean{
 
 fun deleteRow(idParameter: UUID) : Boolean{
   var isDeleted = false
-  transaction(db_connTest){
+  transaction(dbTest){
     val data = TableTestModel.findById(idParameter)
     if(data != null){
       isDeleted = true

@@ -6,24 +6,15 @@ import com.appconstructor.properties.PropertyReader
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.jetbrains.exposed.sql.Database
 
-val secret =
-  PropertyReader()
+val prop = PropertyReader()
 
-val db_connTest = Database.connect(
-  url = secret.connectToTest(),
-  driver = secret.getDriver(),
-  user = secret.getLogin(),
-  password = secret.getPassword()
-)
+val db_connection = Connections()
+val dbTest = db_connection.testConnection(prop.getUrlTest(), prop.getDriver(),
+  prop.getLogin(), prop.getPassword())
 
-val db_connEnvironment = Database.connect(
-  url = secret.connectToLobby(),
-  driver = secret.getDriver(),
-  user = secret.getLogin(),
-  password = secret.getPassword()
-)
+val dbLobby = db_connection.lobbyConnection(prop.getUrlLobby(), prop.getDriver(),
+  prop.getLogin(), prop.getPassword())
 
 fun main() {
   embeddedServer(

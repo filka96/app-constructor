@@ -17,12 +17,12 @@ class PropertyReader{
     return prop.getProperty("driver")
   }
 
-  fun connectToTest() : String{
+  fun getUrlTest() : String{
     FileInputStream(pathFile).use { prop.load(it) }
     return prop.getProperty("urlTest")
   }
 
-  fun connectToLobby() : String{
+  fun getUrlLobby() : String{
     FileInputStream(pathFile).use { prop.load(it) }
     return prop.getProperty("urlLobby")
   }
