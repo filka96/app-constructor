@@ -5,17 +5,17 @@ import com.appconstructor.lobby.model.LobbyDTO
 import java.util.UUID
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun getLobby(idParameter : UUID) : LobbyModel? {
-  var data : LobbyModel? = null
+fun getLobby(idParameter : UUID) : EntityLobby? {
+  var data : EntityLobby? = null
   transaction (db_connEnvironment){
-     data = LobbyModel.findById(idParameter)
+     data = EntityLobby.findById(idParameter)
   }
   return data
 }
 
 fun createLobby(jsonFile : LobbyDTO) {
   transaction(db_connEnvironment){
-    LobbyModel.new {
+    EntityLobby.new {
       title = jsonFile.title
       commit()
     }

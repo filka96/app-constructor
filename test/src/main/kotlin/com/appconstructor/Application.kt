@@ -2,7 +2,7 @@ package com.appconstructor
 
 import com.appconstructor.serialization.configureSerialization
 import com.appconstructor.plugins.configureRouting
-import com.appconstructor.propertyReaper.PropertyReader
+import com.appconstructor.properties.PropertyReader
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty

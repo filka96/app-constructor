@@ -28,7 +28,6 @@ dependencies {
   implementation("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
   implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
   // html
-  //implementation("io.ktor:ktor-server-freemarker:${Versions.ktor}")
   implementation("io.ktor:ktor-server-html-builder:${Versions.ktor}")
   implementation("io.ktor:ktor-client-core:${Versions.ktor}")
   implementation("io.ktor:ktor-client-cio:${Versions.ktor}")
@@ -38,6 +37,4 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1") // todo: move version to Versions
   implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}")
   implementation("io.ktor:ktor-server-content-negotiation:${Versions.ktor}")
-  // uuid
-  implementation("com.eaio.uuid:uuid:3.2") // todo: move version to Versions
 }

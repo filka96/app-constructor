@@ -1,4 +1,4 @@
-package com.appconstructor.propertyReaper
+package com.appconstructor.properties
 
 import java.io.FileInputStream
 import java.util.Properties
