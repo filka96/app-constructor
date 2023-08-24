@@ -1,17 +1,20 @@
 package com.appconstructor
 
+import com.appconstructor.serialization.configureSerialization
 import com.appconstructor.plugins.configureRouting
+import com.appconstructor.properties.PropertyReader
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.jetbrains.exposed.sql.Database
 
-val db_conn = Database.connect(
-  "jdbc:postgresql://localhost:5432/Test",
-  driver = "org.postgresql.Driver",
-  user = "postgres",
-  password = "tyX7~Lp3+"
-)
+val prop = PropertyReader()
+
+val db_connection = Connections()
+val dbTest = db_connection.testConnection(prop.getUrlTest(), prop.getDriver(),
+  prop.getLogin(), prop.getPassword())
+
+val dbLobby = db_connection.lobbyConnection(prop.getUrlLobby(), prop.getDriver(),
+  prop.getLogin(), prop.getPassword())
 
 fun main() {
   embeddedServer(
@@ -24,4 +27,5 @@ fun main() {
 
 fun Application.module() {
   configureRouting()
+  configureSerialization()
 }
