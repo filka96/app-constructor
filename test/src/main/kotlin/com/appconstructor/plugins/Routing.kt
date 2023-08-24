@@ -2,6 +2,7 @@ package com.appconstructor.plugins
 
 import com.appconstructor.app.database.entity.createApp
 import com.appconstructor.app.database.entity.getAllApp
+import com.appconstructor.app.database.entity.getOneApp
 import com.appconstructor.app.database.model.AppDTO
 import com.appconstructor.test.database.model.TableTestDTO
 import com.appconstructor.lobby.entity.getLobby
@@ -37,9 +38,9 @@ import kotlinx.html.title
 fun Application.configureRouting() {
     routing {
         route("/lobby") {
-            route("{id}") {
+            route("{lobbyId}") {
                 get {
-                    val idParameter = call.parameters.getOrFail<UUID>("id")
+                    val idParameter = call.parameters.getOrFail<UUID>("lobbyId")
                     val lobby = getLobby(idParameter)
 
                     if (lobby != null) {
@@ -51,7 +52,7 @@ fun Application.configureRouting() {
                             body{
                                 h1{+"You open lobby ${lobby.title}"}
                                 h1{+"id: ${lobby.id}"}
-                                a("http://127.0.0.1:8080/lobby/${idParameter}/createApp") {
+                                a("http://127.0.0.1:8080/lobby/${idParameter}/createApp"){
                                     +"CreateApp"
                                 }
                                 h1{+"List app:"}
@@ -65,7 +66,7 @@ fun Application.configureRouting() {
                             }
                         }
                     } else {
-                        call.respond(status = HttpStatusCode.NotFound, "")
+                        call.respond(HttpStatusCode.NotFound)
                     }
                 }
                 route("/createApp") {
@@ -76,13 +77,21 @@ fun Application.configureRouting() {
                         // рисуем форму
                         val jsonData = call.receive<AppDTO>()
                         createApp(jsonData)
-                        call.respond(HttpStatusCode.OK, "")
+                        call.respond(HttpStatusCode.OK)
                     }
                 }
-                route("/editApp/{id}"){
+                route("/editApp/{appId}"){
                     get{
-                        call.respondHtml{
-                            body{ h1{+"edit app page"}}
+                        val idParameter = call.parameters.getOrFail<UUID>("appId")
+                        // мне кажется это лишняя выгрузка
+                        val nameApp = getOneApp(idParameter)
+                        if(nameApp != null) {
+                            call.respondHtml {
+                                head { title { +"edit App page" } }
+                                body { h1 { +"${nameApp.title}" } }
+                            }
+                        }else{
+                            call.respond(HttpStatusCode.NotFound)
                         }
                     }
                 }
@@ -93,9 +102,9 @@ fun Application.configureRouting() {
                 val temp = getAllTableTest()
 
                 if(temp != null){
-                    call.respond(status = HttpStatusCode.OK, temp)
+                    call.respond(HttpStatusCode.OK, temp)
                 } else{
-                    call.respond(status = HttpStatusCode.BadRequest, "")
+                    call.respond(HttpStatusCode.BadRequest)
                 }
             }
             get("{id}"){
@@ -107,13 +116,13 @@ fun Application.configureRouting() {
                                                     "${result.intField} " +
                                                     "${result.boolField}")
                 } else{
-                    call.respond(HttpStatusCode.NotFound, "")
+                    call.respond(HttpStatusCode.NotFound)
                 }
             }
             post{
                 val jsonQuery = call.receive<TableTestDTO>()
                 createRow(jsonQuery)
-                call.respond(status = HttpStatusCode.Created, jsonQuery)
+                call.respond(HttpStatusCode.Created, jsonQuery)
             }
             put("{id}"){
                 val idParameter = call.parameters.getOrFail<UUID>("id")
@@ -121,9 +130,9 @@ fun Application.configureRouting() {
                 val isUpdated = updateRow(idParameter, jsonQuery)
 
                 if(isUpdated){
-                    call.respond(status = HttpStatusCode.Accepted, "")
+                    call.respond(HttpStatusCode.Accepted)
                 } else{
-                    call.respond(status = HttpStatusCode.NotFound, "")
+                    call.respond(HttpStatusCode.NotFound)
                 }
             }
             delete("{id}"){
@@ -131,9 +140,9 @@ fun Application.configureRouting() {
                 val result = deleteRow(idParameter)
 
                 if(result){
-                    call.respond(status = HttpStatusCode.OK, "")
+                    call.respond(HttpStatusCode.OK)
                 } else{
-                    call.respond(status = HttpStatusCode.NotFound, "")
+                    call.respond(HttpStatusCode.NotFound)
                 }
             }
         }
