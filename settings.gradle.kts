@@ -6,8 +6,8 @@ pluginManagement {
   }
 }
 
-include(":common")
 include(":core")
 include(":libs:db")
+include(":libs:server")
 include(":plugins")
 include(":test")
