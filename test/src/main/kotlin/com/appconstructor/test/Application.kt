@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.test
 
 import com.appconstructor.libs.server.ServerApp
 import io.ktor.server.application.Application

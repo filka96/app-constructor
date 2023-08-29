@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.test
 
 import com.appconstructor.libs.server.response.ServerResponse
 import com.appconstructor.libs.server.uuid

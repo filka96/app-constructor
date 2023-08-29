@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.test
 
 import com.appconstructor.libs.db.CrudRepository
 import kotlinx.uuid.UUID

@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.test
 
 import kotlinx.serialization.Serializable
 import kotlinx.uuid.UUID

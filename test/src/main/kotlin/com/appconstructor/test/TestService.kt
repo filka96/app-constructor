@@ -1,4 +1,4 @@
-package com.appconstructor
+package com.appconstructor.test
 
 import io.ktor.server.plugins.NotFoundException
 import kotlinx.uuid.UUID
