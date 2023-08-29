@@ -1,27 +1,29 @@
 package com.appconstructor
 
-import com.appconstructor.plugins.configureRouting
+import com.appconstructor.libs.server.ServerApp
 import io.ktor.server.application.Application
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Table
+import org.koin.core.module.Module
 
-val db_conn = Database.connect(
-  "jdbc:postgresql://localhost:5432/Test",
-  driver = "org.postgresql.Driver",
-  user = "postgres",
-  password = "tyX7~Lp3+"
-)
+class Application : ServerApp(
+  applicationName = "test",
+) {
+  override fun inject(module: Module) {
+    module.single<TestTable> { TestTable() }
+    module.single<TestRepository> { TestRepository(get(), get()) }
+    module.single<TestService> { TestService(get()) }
+  }
 
-fun main() {
-  embeddedServer(
-    Netty,
-    port = 8080,
-    host = "0.0.0.0",
-    module = Application::module
-  ).start(wait = true)
+  override fun routingConfiguration(ktor: Application) {
+    ktor.testRouting()
+  }
+
+  override fun getTables(): List<Table> {
+    return listOf(TestTable())
+  }
 }
 
-fun Application.module() {
-  configureRouting()
+fun main() {
+  val app = Application()
+  ServerApp.run(app)
 }
